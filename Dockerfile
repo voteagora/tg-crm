@@ -9,6 +9,8 @@ RUN apt-get update && apt-get install -y \
     zlib1g-dev \
     git \
     python3-dev \
+    gcc \
+    g++ \
     && rm -rf /var/lib/apt/lists/*
 
 # Install TDLib from source with optimized build
@@ -20,15 +22,16 @@ RUN cd /tmp && \
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=/usr/local .. && \
     cmake --build . --target install -j$(nproc) && \
     cd / && \
-    rm -rf /tmp/td
+    rm -rf /tmp/td && \
+    ldconfig
 
 # Set up app directory
 WORKDIR /app
 
-# Install Python dependencies
+# Install Python dependencies with verbose output
 COPY requirements.txt .
-RUN pip install --no-cache-dir wheel && \
-    pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir wheel setuptools && \
+    pip install --no-cache-dir -v -r requirements.txt 2>&1 | tee pip_install.log
 
 # Copy application code
 COPY . .

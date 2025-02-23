@@ -1,15 +1,25 @@
 FROM python:3.9-slim
 
-# Install system dependencies
+# Install system dependencies and TDLib
 RUN apt-get update && apt-get install -y \
-    wget \
+    build-essential \
+    cmake \
+    gperf \
+    libssl-dev \
+    zlib1g-dev \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
-# Install pre-built TDLib
-RUN wget -q https://github.com/tdlib/td/releases/download/v1.8.0/libtdjson_1.8.0_amd64.deb && \
-    dpkg -i libtdjson_1.8.0_amd64.deb || true && \
-    apt-get -f install -y && \
-    rm libtdjson_1.8.0_amd64.deb
+# Install TDLib from source with optimized build
+RUN cd /tmp && \
+    git clone -b v1.8.0 --single-branch --depth 1 https://github.com/tdlib/td.git && \
+    cd td && \
+    mkdir build && \
+    cd build && \
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=/usr/local .. && \
+    cmake --build . --target install -j$(nproc) && \
+    cd / && \
+    rm -rf /tmp/td
 
 # Set up app directory
 WORKDIR /app

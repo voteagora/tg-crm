@@ -1,9 +1,9 @@
-python-telegram==0.16.0
 requests==2.31.0
 python-dotenv==1.0.0
 apscheduler==3.10.1
-tdlib==0.7.0
+python-tdlib==0.7.0
 pydantic==2.5.2
+pydantic-settings==2.1.0
 fastapi==0.104.1
 uvicorn==0.24.0
 sqlalchemy==2.0.23

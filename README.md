@@ -1,5 +1,7 @@
 # Telegram-Attio Integration
 
+[![Docker Build](https://github.com/voteagora/tg-crm/actions/workflows/docker-build.yml/badge.svg)](https://github.com/voteagora/tg-crm/actions/workflows/docker-build.yml)
+
 This service integrates Telegram conversations with Attio CRM, automatically syncing messages as activities in Attio deals.
 
 ## Setup
